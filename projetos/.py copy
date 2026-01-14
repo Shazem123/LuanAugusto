@@ -1,0 +1,54 @@
+cidades = []
+
+def listagem():
+    if not cidades:
+        print('Lista de cidades vazias! Adicione uma cidade para continuar.')
+        return False
+
+    print('Lista detalhada:')
+    for i, c in enumerate(cidades, start = 1):
+        print(f"{i}. {c['nome']}, {c['país']}")
+        return True
+
+print('Bem vindo ao programa de cidades e países!')
+while True:
+    print('Ver lista: 1 | Adicionar cidade: 2| Remover cidade: 3| Filtrar por país: 4| Sair do programa: (q)')
+    escolha = input('Escolha: ').lower()
+
+    if escolha == '1':
+        listagem()
+
+    elif escolha == '2':
+        nome = input('Digite o nome da cidade: ')
+        país = input('Digite o país da cidade: ')
+
+        cidades.append({'nome': nome, 'país': país})
+        listagem()
+
+    elif escolha == '3':
+        if listagem():
+            try:
+                nº = int(input('Escolha a cidade (nº): '))
+                cidade_removida = cidades.pop(nº - 1) 
+
+            except (ValueError, IndexError):
+                print('Escolha um número válido!')
+
+            print(f"Cidade {cidade_removida['nome']} de número nº{nº} removida com sucesso!")
+
+    elif escolha == '4':
+        busca = input('Qual país deseja filtrar? ').strip().lower()
+        
+        print(f"Cidades em: {busca.title()}")
+        encontrou = False
+        for i, c in enumerate(cidades, start = 1):
+            if busca == c['país'].lower():
+                print(f"{i}, {c['nome']}")
+                encontrou = True
+
+        if not encontrou:
+            print('Nenhuma cidade encontrada nesse país.')
+
+    elif escolha == 'q':
+        print('Encerrando programa.')
+        break
