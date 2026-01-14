@@ -8,7 +8,7 @@ def listagem():
     print('Lista detalhada:')
     for i, c in enumerate(cidades, start = 1):
         print(f"{i}. {c['nome']}, {c['país']}")
-    return True
+        return True
 
 print('Bem vindo ao programa de cidades e países!')
 while True:
