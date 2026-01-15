@@ -1,4 +1,22 @@
+import json
 cidades = []
+
+def salvar_dados():
+    try:
+        with open('cidades.json', 'w', encoding='utf-8') as f:
+            json.dump(cidades, f, ensure_ascii=False, indent=4)
+    except Exception as e:
+        print(f"Erro ao salvar: {e}")
+
+def carregar_dados():
+    global cidades
+    try:
+        with open('cidades.json', 'r', encoding='utf-8') as f:
+            cidades = json.load(f)
+            print("Memória encontrada!")
+    except (FileNotFoundError, json.JSONDecodeError):
+        cidades = []
+        salvar_dados()
 
 def listagem():
     if not cidades:
@@ -8,8 +26,9 @@ def listagem():
     print('Lista detalhada:')
     for i, c in enumerate(cidades, start = 1):
         print(f"{i}. {c['nome']}, {c['país']}")
-        return True
+    return True
 
+carregar_dados()
 print('Bem vindo ao programa de cidades e países!')
 while True:
     print('Ver lista: 1 | Adicionar cidade: 2| Remover cidade: 3| Filtrar por país: 4| Sair do programa: (q)')
@@ -23,18 +42,19 @@ while True:
         país = input('Digite o país da cidade: ')
 
         cidades.append({'nome': nome, 'país': país})
+        salvar_dados()
         listagem()
+        print(f"Cidade {nome} do país {país} adicionada e salva na memória!")
 
     elif escolha == '3':
         if listagem():
             try:
                 nº = int(input('Escolha a cidade (nº): '))
                 cidade_removida = cidades.pop(nº - 1) 
-
+                salvar_dados()
+                print(f"Cidade {cidade_removida['nome']} de número nº{nº} removida com sucesso!")
             except (ValueError, IndexError):
                 print('Escolha um número válido!')
-
-            print(f"Cidade {cidade_removida['nome']} de número nº{nº} removida com sucesso!")
 
     elif escolha == '4':
         busca = input('Qual país deseja filtrar? ').strip().lower()
